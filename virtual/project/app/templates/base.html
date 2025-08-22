@@ -47,10 +47,126 @@
     
   
     }
-    .header__nav__option
-    {
-        font-size: 18px;
-    }
+    .nav-special {
+    font-weight: bold; /* changed from 600 */
+    font-size: 15px;
+    color: black;
+    border: 1px solid rgb(93, 95, 93);
+    padding: 6px 12px;
+    border-radius: 6px;
+    gap: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: transparent;  /* ensure clean look */
+}
+
+.nav-special:hover {
+    background: rgb(176, 130, 70);
+    color: #fff !important;
+}
+
+/* ✅ Apply round button style only for links with SVG (cart/profile) */
+.header__nav__option a svg {
+    width: 20px;
+    height: 20px;
+}
+
+.header__nav__option a:has(svg) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: #333;
+    text-decoration: none;
+    gap: 2px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.header__nav__option a:has(svg):hover {
+    background-color:rgb(176, 130, 70);
+    color: #fff;
+}
+
+/* Cart badge */
+#cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff4757;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
+}
+/* ===== Footer Styling ===== */
+.footer {
+    background: #111; /* Dark footer for contrast */
+    color: #ddd;
+    padding: 50px 0 20px;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.footer__about p {
+    font-size: 14px;
+    color: #aaa;
+    margin-top: 10px;
+}
+
+.footer__logo img {
+    max-height: 35px;
+    filter: brightness(0) invert(1); /* make logo white in dark footer */
+}
+
+.footer__widget h6 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.footer__widget ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer__widget ul li {
+    margin-bottom: 8px;
+}
+
+.footer__widget ul li a {
+    color: #bbb;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.footer__widget ul li a:hover {
+    color: #b08246; /* matches your nav hover color */
+    padding-left: 4px;
+}
+
+/* Divider line */
+.footer hr {
+    border: none;
+    border-top: 1px solid #333;
+    margin: 20px 0;
+}
+
+/* Bottom small text */
+.footer__bottom {
+    text-align: center;
+    color: #888;
+    font-size: 13px;
+    margin-top: 20px;
+}
+
     </style>
 
 <body>
@@ -122,32 +238,27 @@
                         <ul>
                             <li><a href="{% url 'index2' %}">Home</a></li>
                             <li><a href="{% url 'about' %}">About</a></li>
+                    
                             {% if request.user.is_authenticated %}
-                            <li><a href="{% url 'shop' %}">Products</a></li>
-                        {% else %}
-                            {% if roll == 'user' or roll == 'seller' %}
-                                <li><a href="{% url 'shop' %}">Products</a></li>
+                                {% if request.user.is_superuser or roll == 'seller' %}
+                                    <!-- Admin and Seller see everything -->
+                                    <li><a href="{% url 'shop' %}">Products</a></li>
+                                    <li><a href="{% url 'job' %}">Jobs</a></li>
+                                {% elif roll == 'user' %}
+                                    <!-- Buyer -->
+                                    <li><a href="{% url 'shop' %}">Products</a></li>
+                                {% elif roll == 'company' %}
+                                    <!-- Company -->
+                                    <li><a href="{% url 'job' %}">Jobs</a></li>
+                                {% endif %}
+                            {% else %}
+                                <!-- Guest (not logged in) just show Home, About, Contact -->
                             {% endif %}
-                        {% endif %}
-                        
-                        {% if request.user.is_authenticated %}
-                            <li><a href="{% url 'job' %}">Jobs</a></li>
-                        {% else %}
-                            {% if roll == 'company' or roll == 'seller' %}
-                                <li><a href="{% url 'job' %}">Jobs</a></li>
-                            {% endif %}
-                        {% endif %}
-                        
-                                 {% comment %}<ul class="dropdown">
-                                    <li><a href="{% url 'about' %}">About Us</a></li>
-                                    <li><a href="{% url 'shop_details' %}">Shop Details</a></li>
-                                    <li><a href="{% url 'shopping_cart' %}">Shopping Cart</a></li>
-                                    <li><a href="{% url 'checkout' %}">Check Out</a></li> {% endcomment %}
-                                    {% comment %} <li><a href="{% url 'blog_details' %}">Blog Details</a></li> {% endcomment %}
-                              
+                    
                             <li><a href="{% url 'contact' %}">Contact</a></li>
                         </ul>
                     </nav>
+                    
                 </div>
                 <div class="col-lg-3 col-md-3">
                     <div class="header__nav__option">
@@ -155,27 +266,29 @@
                             <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
                           </svg><span id="cart-count"  class="badge badge-pill badge-info" style="margin-top: -10px;margin-left:10px;">{{ cart_count }}</span></a>
                         {% if request.user.is_authenticated %}
-										<a href="{% url 'profile' %}">
-											<svg width="23" height="23" viewBox="0 0 24 24"fill="none">
-											<path fill-rule="evenodd" clip-rule="evenodd"d="M16 9C16 11.2091 14.2091 13 12 13C9.79086 13 8 11.2091 8 9C8 6.79086 9.79086 5 12 5C14.2091 5 16 6.79086 16 9ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9Z"
-											  fill="currentColor"/>
-											<path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM3 12C3 14.0902 3.71255 16.014 4.90798 17.5417C6.55245 15.3889 9.14627 14 12.0645 14C14.9448 14 17.5092 15.3531 19.1565 17.4583C20.313 15.9443 21 14.0524 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12ZM12 21C9.84977 21 7.87565 20.2459 6.32767 18.9878C7.59352 17.1812 9.69106 16 12.0645 16C14.4084 16 16.4833 17.1521 17.7538 18.9209C16.1939 20.2191 14.1881 21 12 21Z"
-											  fill="currentColor"/>
-										  </svg></a>
-                                           {% if roll == 'seller' and choice == 'yes' %} 
-										  <a href="{% url 'addproduct_data' %}" style="text-decoration-line: none; color: black;">Add Product</a> 
-                                         {% elif roll == 'company' %}
-                                          <a href="{% url 'jobpost' %}" style="text-decoration-line: none; color: black;">Add job</a>
-                                          {% endif %} 
-				                        {% else %}
-										  <a href="{% url 'user_login' %}" style="text-decoration-line: none; color: black;">Login</a>
-								        {% endif %}
-                                        {% if request.user.is_authenticated %}
-                                        <a href="{% url 'chat_users' %}" style="text-decoration-line: none; color: black;">chat</a>
-                                        {% endif %}
-                                  </div>
-                             </div>
-                      </div>
+							<a href="{% url 'profile' %}">
+								<svg width="23" height="23" viewBox="0 0 24 24"fill="none">
+								    <path fill-rule="evenodd" clip-rule="evenodd"d="M16 9C16 11.2091 14.2091 13 12 13C9.79086 13 8 11.2091 8 9C8 6.79086 9.79086 5 12 5C14.2091 5 16 6.79086 16 9ZM14 9C14 10.1046 13.1046 11 12 11C10.8954 11 10 10.1046 10 9C10 7.89543 10.8954 7 12 7C13.1046 7 14 7.89543 14 9Z"
+								        fill="currentColor"/>
+									<path fill-rule="evenodd" clip-rule="evenodd" d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM3 12C3 14.0902 3.71255 16.014 4.90798 17.5417C6.55245 15.3889 9.14627 14 12.0645 14C14.9448 14 17.5092 15.3531 19.1565 17.4583C20.313 15.9443 21 14.0524 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12ZM12 21C9.84977 21 7.87565 20.2459 6.32767 18.9878C7.59352 17.1812 9.69106 16 12.0645 16C14.4084 16 16.4833 17.1521 17.7538 18.9209C16.1939 20.2191 14.1881 21 12 21Z"
+											fill="currentColor"/>
+								</svg>
+                            </a>
+                            {% if roll == 'seller' and choice == 'yes' %} 
+								<a href="{% url 'addproduct_data' %}" class="nav-special">Add Product</a> 
+                                {% elif roll == 'company' %}
+                                    <a href="{% url 'jobpost' %}" class="nav-special">Add job</a>
+                                {% endif %} 
+				                {% else %}
+								    <a href="{% url 'user_login' %}" class="nav-special">Login</a>
+								{% endif %}
+                        {% if request.user.is_authenticated %}
+                            <a href="{% url 'chat_users' %}" class="nav-special">chat</a>
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="canvas__open"><i class="fa fa-bars"></i></div>
           </div>
     </header>
@@ -185,7 +298,7 @@
       </svg></a>
     <footer class="footer">
       <div class="container">
-          <div class="row">
+          <div class="row" class="footer__bottom">
               <div class="col-lg-3 col-md-6 col-sm-6">
                   <div class="footer__about">
                       <div class="footer__logo">
@@ -194,7 +307,7 @@
                       <p>The customer is at the heart of our unique business model, which includes design.</p>
                   </div>
               </div>
-              <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6">
+              <div class="col-lg-2 offset-lg-1 col-md-3 col-sm-6" >
                   <div class="footer__widget">
                       <h6>Shopping</h6>
                       <ul>

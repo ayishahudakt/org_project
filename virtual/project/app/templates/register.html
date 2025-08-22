@@ -121,40 +121,40 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 $(document).ready(function() {
   $('input[name="choice"]').on('change', function() {
     if ($(this).val() === 'yes') {
+      // Show certificate upload
       $('#certificateInput').show();
       $('#forcertificate').prop('required', true);
 
-      // Completely hide seller/user/company when 'yes'
+      // Force role as seller (hidden)
       $('#rollInput').hide();
-      $('input[name="roll"]').prop('required', false);
+      $('input[name="roll"][value="seller"]').prop('checked', true);
 
     } else {
+      // Hide certificate upload
       $('#certificateInput').hide();
       $('#forcertificate').prop('required', false);
 
+      // Show rollInput with only user & company
       $('#rollInput').show();
-      $('input[name="roll"]').prop('required', false);
-
-      // If choice is 'no', hide the 'seller' radio button but keep user & company
       $('input[name="roll"][value="seller"]').parent().hide();
       $('input[name="roll"][value="user"]').parent().show();
       $('input[name="roll"][value="company"]').parent().show();
+
+      // Default to user
+      $('input[name="roll"][value="user"]').prop('checked', true);
     }
   });
 
-  // Trigger change event on page load
+  // Trigger change on page load
   $('input[name="choice"]:checked').trigger('change');
 
   $('#registration-form').on('submit', function(event) {
     event.preventDefault();
-
-    if ($('input[name="choice"]:checked').val() === 'no' && !$('input[name="roll"][value="company"]').prop('checked')) {
-      $('input[name="roll"]').val('user');
-    }
 
     var formData = new FormData(this);
 
