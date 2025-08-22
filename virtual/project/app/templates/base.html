@@ -122,8 +122,22 @@
                         <ul>
                             <li><a href="{% url 'index2' %}">Home</a></li>
                             <li><a href="{% url 'about' %}">About</a></li>
+                            {% if request.user.is_authenticated %}
                             <li><a href="{% url 'shop' %}">Products</a></li>
+                        {% else %}
+                            {% if roll == 'user' or roll == 'seller' %}
+                                <li><a href="{% url 'shop' %}">Products</a></li>
+                            {% endif %}
+                        {% endif %}
+                        
+                        {% if request.user.is_authenticated %}
                             <li><a href="{% url 'job' %}">Jobs</a></li>
+                        {% else %}
+                            {% if roll == 'company' or roll == 'seller' %}
+                                <li><a href="{% url 'job' %}">Jobs</a></li>
+                            {% endif %}
+                        {% endif %}
+                        
                                  {% comment %}<ul class="dropdown">
                                     <li><a href="{% url 'about' %}">About Us</a></li>
                                     <li><a href="{% url 'shop_details' %}">Shop Details</a></li>
@@ -217,17 +231,7 @@
                   </div>
               </div> {% endcomment %}
           </div>
-          <div class="row">
-              <div class="col-lg-12 text-center">
-                  <div class="footer__copyright__text">
-                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                      <p>Powerd By
-                        &nbsp;Mdigitz 
-                      </p>
-                      <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                  </div>
-              </div>
-          </div>
+          
       </div>
   </footer>
   <!-- Footer Section End -->
