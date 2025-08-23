@@ -544,6 +544,17 @@ def addproduct(request):
         image = request.FILES['images']  
         multi_images = request.POST.getlist('newsfeedsmultipleimg[]')
         
+        # Price validation
+        try:
+            price = float(price)
+            if price <= 0:
+                return JsonResponse({'error': 'Price must be greater than zero'})
+            if not price.is_integer():
+                return JsonResponse({'error': 'Price must be a whole number (no decimals)'})
+            price = int(price)  # Convert to integer
+        except (ValueError, TypeError):
+            return JsonResponse({'error': 'Invalid price format'})
+        
         product = Product(
             product_category=selected_product_category, 
             user =request.user,
