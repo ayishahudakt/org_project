@@ -35,6 +35,7 @@
                                         <th class="product-remove" ></th>
                                         <th class="product-image">image</th>
                                         <th class="product-name">name</th>
+                                        <th class="product-seller">seller</th>
                                         <th class="product-price">price</th>
                                         <th class="product-quantity">quantity</th>
                                         <th class="product-total">total</th>       
@@ -51,6 +52,7 @@
                                           </svg></a></td>
                                         <td class="product-image"><img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width=80px height=80px></td>
                                         <td class="product-name"><input class="p_id" name="pid[]" type="hidden"  value="{{ item.id }}">{{ item.product.title }}</td>
+                                        <td class="product-seller">{{ item.product.user.username }}</td>
                                         <td class="product-price cost"><span>₹</span>{{ item.product.price|floatformat:2 }}</td>
                                         <td class="product-quantity">
                                             

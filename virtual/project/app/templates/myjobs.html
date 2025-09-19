@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<!-- 
+ 
 <style>
   .leftlinkpanel
   {
@@ -56,7 +56,9 @@
               <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
               <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
           {% endif %}
+          {% if roll != 'company' %}
           <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+          {% endif %}
           <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
       </div>
   </div>
@@ -119,5 +121,5 @@
 
 
 </script>
--->
+
       {% endblock %}

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
-<!-- 
+
 <style>
 
   .left-link {
@@ -66,7 +66,9 @@
                       <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
                       <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
                   {% endif %}
+                  {% if roll != 'company' %}
                   <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                  {% endif %}
                   <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
               </div>
           </div>
@@ -90,8 +92,9 @@
                     </div>
     
                     <div class="form-outline mb-4">
-                      <input type="number"  name="salary" placeholder="salary" class="form-control form-control-lg" required >
-                      <label class="form-label" for="price" ></label>
+                      <input type="number"  name="salary" placeholder="salary" class="form-control form-control-lg" required min="1" max="1000000" step="1" id="salary-input">
+                      <label class="form-label" for="salary" ></label>
+                      <div id="salary-error" class="text-danger" style="display: none; font-weight: bold; margin-top: 5px;"></div>
                     </div>
                     <div class="form-outline mb-4">
                       <textarea name="description" rows="5" class="form-control form-control-lg" placeholder="Description"></textarea>
@@ -123,11 +126,43 @@
 
       $('#job-form').on('submit', function(event) {
         event.preventDefault();
+        
+        // Salary validation
+        var salary = $('#salary-input').val();
+        var salaryError = $('#salary-error');
+        
+        // Reset error message
+        salaryError.hide();
+        
+        // Check if salary is empty
+        if (!salary) {
+            salaryError.text('Salary is required').show();
+            return;
+        }
+        
+        // Check if salary is negative or zero
+        if (salary <= 0) {
+            salaryError.text('Salary must be greater than zero').show();
+            return;
+        }
+        
+        // Check if salary is not an integer
+        if (!Number.isInteger(parseFloat(salary))) {
+            salaryError.text('Salary must be a whole number (no decimals)').show();
+            return;
+        }
+        
+        // Check if salary exceeds 10 lakhs (1,000,000)
+        if (parseFloat(salary) > 1000000) {
+            salaryError.text('Salary cannot exceed ₹10,00,000 (10 lakhs)').show();
+            return;
+        }
+        
    var csrfToken = $('[name=csrfmiddlewaretoken]').val();
    var formData = new FormData(this); // convert form to array
          $.ajax({
           type: 'POST',
-          url: 'jobpost',
+          url: '/jobpost',
           data: formData,
           processData: false,
           contentType: false,
@@ -155,6 +190,30 @@
         reader.readAsDataURL(input.files[0]);
       }
     });
+
+    // Real-time salary validation
+    $('#salary-input').on('input', function() {
+        var salary = $(this).val();
+        var salaryError = $('#salary-error');
+        
+        // Reset error message
+        salaryError.hide();
+        
+        if (salary) {
+            // Check if salary is negative or zero
+            if (salary <= 0) {
+                salaryError.text('Salary must be greater than zero').show();
+            }
+            // Check if salary is not an integer
+            else if (!Number.isInteger(parseFloat(salary))) {
+                salaryError.text('Salary must be a whole number (no decimals)').show();
+            }
+            // Check if salary exceeds 10 lakhs (1,000,000)
+            else if (parseFloat(salary) > 1000000) {
+                salaryError.text('Salary cannot exceed ₹10,00,000 (10 lakhs)').show();
+            }
+        }
+    });
     </script>
-  -->
+  
     {%endblock %}

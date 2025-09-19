@@ -161,6 +161,7 @@
                                                 <div class="featured_item_text">
                                                    <h6>{{ product.name }}{{ product.title }}</h6></a>
                                                     <h5> ₹{{ product.price }}</h5>
+                                                    <p style="font-size: 14px; color: #666; margin: 5px 0;"><strong>Seller:</strong> {{ product.user.username }}</p>
                                                     <button class="cart-btn btn-primary"><i class="fa fa-shopping-cart"></i>add to cart</button>
                                                     <div class="cart_addition" style="font-size: large; text-align: center;"></div>
                                                 </div>
@@ -243,6 +244,7 @@
                                         <!-- Corrected URL with the proper product ID -->
                                         <a href="${shopDetailsURL}"><h6>${results[i].title}</h6></a>
                                         <h5> ₹${results[i].price}</h5>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;"><strong>Seller:</strong> ${results[i].username}</p>
                                         <button class="cart-btn btn-primary"><i class="fa fa-shopping-cart"></i>add to cart</button>
                                         <div class="cart_addition" style="font-size: large; text-align: center;"></div>
                                     </div>

@@ -56,8 +56,9 @@
                     </div>
     
                     <div class="form-outline mb-4">
-                      <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" value='{{product_value.price}}' required >
+                      <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" value='{{product_value.price}}' required min="1" max="500000" step="1" id="price-input">
                       <label class="form-label" for="price" ></label>
+                      <div id="price-error" class="text-danger" style="display: none; font-weight: bold; margin-top: 5px;"></div>
                     </div>
                     <div class="form-outline mb-4">
                       <input type="hidden"  name="pid" class="form-control form-control-lg" value='{{product.id}}' required >
@@ -132,6 +133,37 @@ $(document).ready(function () {
 
     $('#productedit-form').on('submit', function (event) {
         event.preventDefault();
+
+        // Price validation
+        var price = $('#price-input').val();
+        var priceError = $('#price-error');
+        
+        // Reset error message
+        priceError.hide();
+        
+        // Check if price is empty
+        if (!price) {
+            priceError.text('Price is required').show();
+            return;
+        }
+        
+        // Check if price is negative or zero
+        if (price <= 0) {
+            priceError.text('Price must be greater than zero').show();
+            return;
+        }
+        
+        // Check if price is not an integer
+        if (!Number.isInteger(parseFloat(price))) {
+            priceError.text('Price must be a whole number (no decimals)').show();
+            return;
+        }
+        
+        // Check if price exceeds 5 lakhs (500,000)
+        if (parseFloat(price) > 500000) {
+            priceError.text('Price cannot exceed ₹5,00,000 (5 lakhs)').show();
+            return;
+        }
 
         var product_id = $('[name="pid"]').val(); 
         var csrfToken = $('[name="csrfmiddlewaretoken"]').val(); 
@@ -276,6 +308,30 @@ $(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
     var index = $(this).closest('.imag').index(); // Get the index of the clicked image
 
     deleteNewlyAddedImage(index);
+});
+
+// Real-time price validation
+$('#price-input').on('input', function() {
+    var price = $(this).val();
+    var priceError = $('#price-error');
+    
+    // Reset error message
+    priceError.hide();
+    
+    if (price) {
+        // Check if price is negative or zero
+        if (price <= 0) {
+            priceError.text('Price must be greater than zero').show();
+        }
+        // Check if price is not an integer
+        else if (!Number.isInteger(parseFloat(price))) {
+            priceError.text('Price must be a whole number (no decimals)').show();
+        }
+        // Check if price exceeds 5 lakhs (500,000)
+        else if (parseFloat(price) > 500000) {
+            priceError.text('Price cannot exceed ₹5,00,000 (5 lakhs)').show();
+        }
+    }
 });
     </script>
     {%endblock %}

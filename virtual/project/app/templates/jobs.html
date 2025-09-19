@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 
-<!-- 
+
 <style>
  
   .ms-5 {
@@ -103,10 +103,10 @@
     box-shadow: 0 0 0 2px #007bff; /* Adds a focus indicator */
   }
 </style>
--->
+
 <!-- Your HTML structure -->
 
-<!--
+
 <div class="ms-5 mt-5">
   <div class="hero__search">
     <div class="hero_search_form">
@@ -124,27 +124,34 @@
 </div>
 <div class="container">
   <div id="job-container" class="row">
-  -->
+  
     <!-- Display job cards here -->
-    <!--
-    {% for job in all_jobs %}
-    <div class="col-md-4">
-      <div class="card job-card">
-        <img class="card-img-top" src="{{ job.image.url }}" alt="Card image cap">
-        <div class="card-body">
-          <h5 class="card-title" style="text-decoration-line: none;"><b>Job post</b></h5>
-          <h5 class="card-title" style="text-decoration-line: none;">{{ job.title }}</h5>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item"><b>Salary</b></li>
-          <li class="list-group-item">₹{{ job.salary }}</li>
-        </ul>
-        <div class="card-body">
-          <a href="{% url 'singlejob' job.id %}" class="btn btn-info">View</a>
+    
+    {% if all_jobs %}
+      {% for job in all_jobs %}
+      <div class="col-md-4">
+        <div class="card job-card">
+          <img class="card-img-top" src="{{ job.image.url }}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title" style="text-decoration-line: none;"><b>Job post</b></h5>
+            <h5 class="card-title" style="text-decoration-line: none;">{{ job.title }}</h5>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><b>Salary</b></li>
+            <li class="list-group-item">₹{{ job.salary }}</li>
+          </ul>
+          <div class="card-body">
+            <a href="{% url 'job32' job.id %}" class="btn btn-info">View</a>
+          </div>
         </div>
       </div>
-    </div>
-    {% endfor %}
+      {% endfor %}
+    {% else %}
+      <div class="col-md-12">
+        <h3 style="text-align: center; margin-top: 50px;">No jobs available at the moment.</h3>
+        <p style="text-align: center;">Please check back later or post a job if you're a company.</p>
+      </div>
+    {% endif %}
   </div>
 </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -166,8 +173,8 @@
                         resultsHtml = '<div class="col-md-12"><h4>No job posts found.</h4></div>';
                     } else {
                         for (var i = 0; i < results.length; i++) {
-                            var jobDetailsURL = "{% url 'singlejob' 0 %}".replace('0', results[i].id);
-                            jobDetailsURL = "{% url 'singlejob' 0 %}".replace('0', results[i].id);
+                            var jobDetailsURL = "{% url 'job32' 0 %}".replace('0', results[i].id);
+                            jobDetailsURL = "{% url 'job32' 0 %}".replace('0', results[i].id);
 
                             resultsHtml += `
                         <div class="col-md-4">
@@ -199,5 +206,5 @@
         });
     });
 </script>
--->
+
 {% endblock %}

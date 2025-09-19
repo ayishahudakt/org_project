@@ -48,10 +48,14 @@
                       <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
                       <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
                   {% endif %}
+                  {% if not log_det1.is_superuser and roll != 'company' %}
                   <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                  {% endif %}
                   <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
+                  {% if not log_det1.is_superuser %}
                   <a href="{% url 'password' user.id %}" class="{% if request.path == '/logout' %}active{% endif %} left-link">Change Password</a>
-              </div>
+                  {% endif %}
+                </div>
           </div>
             <div class="col col-lg-8 col-xl-8">
               <div class="card">
