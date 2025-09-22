@@ -950,7 +950,8 @@ def job_search_ajax(request):
             'skill':job.skills,
             'description': job.description,  
             'image':job.image.url,
-            'id': job.id
+            'id': job.id,
+            'company_username': job.user_id.username
         }
         for job in jobs
     ]
@@ -1030,7 +1031,9 @@ def home(request):
 def room(request):
     username = request.GET.get('username')
     room = 'sunil'
-    room_details = Room.objects.get(name=room)
+    
+    # Get or create the room
+    room_details, created = Room.objects.get_or_create(name=room)
     selected_user_id = request.GET.get('selected_user_id')  # Retrieve selected user ID
 
     return render(request, 'room.html', {
@@ -1045,14 +1048,15 @@ def checkview(request, uid):
     details = User.objects.filter(id=user_id).values_list('username', flat=True).first()
     username = details
     selected_user_id = request.GET.get('selected_user_id')
+    
+    # Create room if it doesn't exist
+    room_details, created = Room.objects.get_or_create(name=room)
+    
     if selected_user_id:
         return redirect(f'/{room}/?username={username}&selected_user_id={selected_user_id}')
     else:
         # Handle the case if selected_user_id is not present in the URL
-        pass
-        # new_room = Room.objects.create(name=room)
-        # new_room.save()
-        # return redirect('/'+room+'/?username='+username)
+        return redirect(f'/{room}/?username={username}')
 
 
 def send(request):
@@ -1083,7 +1087,7 @@ def send(request):
 def getMessages(request):
     user_id = request.user.id
     room = 'sunil'
-    room_details = Room.objects.get(name=room)
+    room_details, created = Room.objects.get_or_create(name=room)
     selected_user_id = request.GET.get('selected_user_id')
 
     # Filter messages where the sender is the current user and the receiver is the selected user

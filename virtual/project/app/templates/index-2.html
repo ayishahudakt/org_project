@@ -105,6 +105,41 @@
 .cart-btn:hover {
     background-color: #f44336; /* Hover effect for the add to cart button */
 }
+
+.product-owner {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.product-owner i {
+    color: #ff5722;
+    font-size: 12px;
+}
+
+.product-owner:hover {
+    color: #ff5722;
+    transition: color 0.3s ease;
+}
+
+.product-owner:hover i {
+    color: #f44336;
+    transition: color 0.3s ease;
+}
+
+.featured_item_text {
+    padding: 20px 0;
+    text-align: center;
+    height: 200px; /* Increased height to accommodate owner info */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
 </style>
 
     <section class="hero">
@@ -129,7 +164,7 @@
      
 
 
-    <section class="banner spad">
+    <!-- <section class="banner spad">
         <div class="container">
           <div class="row">
              <div class="col-lg-7 offset-lg-4">
@@ -164,13 +199,15 @@
              </div>
           </div>
         </div>
-     </section>
+     </section> -->
     <!-- Banner Section End -->
 
     <!-- Product Section Begin -->
+     {% if roll != 'company' %}
     <section class="product spad">
         <div class="container">
             <ul class="filter__controls">
+                <br>
                 <li data-filter=".new-arrivals">New Arrivals</li>
             </ul>
            
@@ -188,6 +225,9 @@
                                 <h6>{{ product.name }}{{ product.title }}</h6>
                             </a>
                             <h5> ₹{{ product.price }}</h5>
+                            <p class="product-owner" style="font-size: 14px; color: #666; margin: 5px 0;">
+                                <i class="fa fa-user"></i> Sold by: {{ product.user.username }}
+                            </p>
                             <button class="cart-btn btn-primary"><i class="fa fa-shopping-cart"></i>add to cart</button>
                             <div class="cart_addition" style="font-size: large; text-align: center;"></div>
                         </div>
@@ -201,7 +241,7 @@
             </div>
         </div>
     </section>
-    
+    {% endif %}
     <!-- Product Section End -->
 
     <!-- Instagram Section Begin -->

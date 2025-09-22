@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
@@ -71,7 +70,7 @@
                           
                   <div class="d-flex flex-row align-items-center mb-4">
                       <div class="form-outline flex-fill mb-0">
-                        <input id="forimg" type="file"  class="form-control" placeholder="Image" name="image" >
+                        <input id="forimg" type="file"  class="form-control" placeholder="Image" name="image" required>
                         <label class="form-label" for="pic">your photo</label><br>
                         <img id="profilepic" src="" width="200px" height="200px" style="display: none;" >
                       </div>
@@ -140,10 +139,12 @@ $(document).ready(function() {
       $('#rollInput').show();
       $('input[name="roll"]').prop('required', false);
 
+      // If choice is 'no', hide the 'seller' radio button
       $('input[name="roll"][value="seller"]').parent().hide();
     }
   });
 
+  // Trigger change event on page load
   $('input[name="choice"]:checked').trigger('change');
 
     $('#registration-form').on('submit', function(event) {

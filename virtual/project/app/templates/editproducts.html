@@ -56,8 +56,9 @@
                     </div>
     
                     <div class="form-outline mb-4">
-                      <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" value='{{product_value.price}}' required >
+                      <input type="number"  name="price" placeholder="Product Price (₹100 - ₹1,00,000)" class="form-control form-control-lg" value='{{product_value.price}}' min="100" max="100000" step="1" required >
                       <label class="form-label" for="price" ></label>
+                      <small class="form-text text-muted">Price must be between ₹100 and ₹1,00,000</small>
                     </div>
                     <div class="form-outline mb-4">
                       <input type="hidden"  name="pid" class="form-control form-control-lg" value='{{product.id}}' required >
@@ -132,6 +133,13 @@ $(document).ready(function () {
 
     $('#productedit-form').on('submit', function (event) {
         event.preventDefault();
+
+        // Validate price range
+        var price = parseFloat($('input[name="price"]').val());
+        if (price < 100 || price > 100000) {
+            alert("Price must be between ₹100 and ₹1,00,000");
+            return;
+        }
 
         var product_id = $('[name="pid"]').val(); 
         var csrfToken = $('[name="csrfmiddlewaretoken"]').val(); 

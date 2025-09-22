@@ -65,7 +65,7 @@
                       <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
                       <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
                   {% endif %}
-                  <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+                 <!--  <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a> -->
                   <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
               </div>
           </div>
@@ -89,8 +89,9 @@
                     </div>
     
                     <div class="form-outline mb-4">
-                      <input type="number"  name="salary" placeholder="salary" class="form-control form-control-lg" required >
+                      <input type="number"  name="salary" placeholder="Salary (₹10,000 - ₹50,00,000)" class="form-control form-control-lg" min="10000" max="5000000" step="1000" required >
                       <label class="form-label" for="price" ></label>
+                      <small class="form-text text-muted">Salary must be between ₹10,000 and ₹50,00,000</small>
                     </div>
                     <div class="form-outline mb-4">
                       <textarea name="description" rows="5" class="form-control form-control-lg" placeholder="Description"></textarea>
@@ -122,6 +123,14 @@
 
       $('#job-form').on('submit', function(event) {
         event.preventDefault();
+
+        // Validate salary range
+        var salary = parseFloat($('input[name="salary"]').val());
+        if (salary < 10000 || salary > 5000000) {
+            $('#job_added').text("Salary must be between ₹10,000 and ₹50,00,000").css('color', 'red');
+            return;
+        }
+
    var csrfToken = $('[name=csrfmiddlewaretoken]').val();
    var formData = new FormData(this); // convert form to array
          $.ajax({
@@ -131,11 +140,11 @@
           processData: false,
           contentType: false,
             success: function(response) {
-              $('#job_added').text("job Added Successfully");
+              $('#job_added').text("Job Added Successfully").css('color', 'green');
                 
             },
             error: function(response) {
-              $('#job_added').text(response.responseJSON.error);
+              $('#job_added').text(response.responseJSON.error).css('color', 'red');
             }
         });
     });

@@ -7,22 +7,22 @@ from . models import *
 
 class Post_categoryAdmin(admin.ModelAdmin):
     list_display=('title',)
-    feilds=('title',)
+    fields=('title',)
 admin.site.register(Post_category,Post_categoryAdmin)
 
 class PostAdmin(admin.ModelAdmin):
     list_display=('title','job_title','description','description2','image','Post_category_id')
-    feilds=('title','job_title','description','description2','image','Post_category_id')
+    fields=('title','job_title','description','description2','image','Post_category_id')
 admin.site.register(Post,PostAdmin)
 
-class Address_infoAdmin(admin.ModelAdmin):
-    list_display=('name','current_address','permenent_address','place','country','district','phone','pincode')
-    feilds=('name','current_address','permenent_address','place','country','district','phone','pincode')
-admin.site.register(Address_info,Address_infoAdmin)
+#class Address_infoAdmin(admin.ModelAdmin):
+#    list_display=('name','current_address','permenent_address','place','country','district','phone','pincode')
+#    feilds=('name','current_address','permenent_address','place','country','district','phone','pincode')
+#admin.site.register(Address_info,Address_infoAdmin)
 
 class Product_categoryAdmin(admin.ModelAdmin):
     list_display=('title',)
-    feilds=('title',)
+    fields=('title',)
 admin.site.register(Product_category,Product_categoryAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
@@ -36,8 +36,8 @@ class Product_multi_imageAdmin(admin.ModelAdmin):
 admin.site.register(Product_multi_image,Product_multi_imageAdmin)
 
 class profileAdmin(admin.ModelAdmin):
-    list_display=('username','name','password','email','address','place','country','district','image','certificate',)
-    feilds=('username','name','password','email','address','place','country','district','image','certificate',)
+    list_display=('username','name','password','email','roll','address','place','country','district','image','certificate',)
+    feilds=('username','name','password','email','roll','address','place','country','district','image','certificate',)
 admin.site.register(Profile,profileAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
@@ -67,8 +67,24 @@ class Job_applicationAdmin(admin.ModelAdmin):
 admin.site.register(Job_application,Job_applicationAdmin)
 
 class user_detailsAdmin(admin.ModelAdmin):
-    list_display=('block_status',)
-    feilds=('block_status',)
+    list_display=('block_status', 'get_username', 'get_roll', 'get_email')
+    fields=('block_status', 'user')
+    
+    def get_username(self, obj):
+        return obj.user.username if obj.user else ''
+    get_username.short_description = 'Username'
+    
+    def get_roll(self, obj):
+        try:
+            profile = obj.user.profile
+            return profile.roll if profile else ''
+        except:
+            return ''
+    get_roll.short_description = 'Roll'
+    
+    def get_email(self, obj):
+        return obj.user.email if obj.user else ''
+    get_email.short_description = 'Email'
 admin.site.register(user_details,user_detailsAdmin)
 
 admin.site.register(Room)

@@ -100,6 +100,31 @@
     outline: none; /* Removes the default focus outline */
     box-shadow: 0 0 0 2px #007bff; /* Adds a focus indicator */
   }
+  
+  /* Company information styling */
+  .company-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
+    padding: 8px 16px !important;
+  }
+  
+  .company-info i {
+    color: #007bff;
+    font-size: 14px;
+  }
+  
+  .company-info:hover {
+    color: #007bff;
+    transition: color 0.3s ease;
+  }
+  
+  .company-info:hover i {
+    color: #0056b3;
+    transition: color 0.3s ease;
+  }
 </style>
 
 <!-- Your HTML structure -->
@@ -132,6 +157,10 @@
         <ul class="list-group list-group-flush">
           <li class="list-group-item"><b>Salary</b></li>
           <li class="list-group-item">₹{{ job.salary }}</li>
+          <li class="list-group-item"><b>Company</b></li>
+          <li class="list-group-item company-info">
+            <i class="fa fa-building"></i> {{ job.user_id.username }}
+          </li>
         </ul>
         <div class="card-body">
           <a href="{% url 'singlejob' job.id %}" class="btn btn-info">View</a>
@@ -174,6 +203,10 @@
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item"><b>Salary</b></li>
                                     <li class="list-group-item">₹${results[i].salary}</li>
+                                    <li class="list-group-item"><b>Company</b></li>
+                                    <li class="list-group-item company-info">
+                                        <i class="fa fa-building"></i> ${results[i].company_username}
+                                    </li>
                                 </ul>
                                 <div class="card-body">
                                     <a href="${jobDetailsURL}" class="btn btn-primary" style="color: white;">View</a>

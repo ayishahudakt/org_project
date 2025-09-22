@@ -38,6 +38,10 @@
                             <div class="card-body">
                                 <h1 class="h2">{{ job.title}}</h1>
                                 <p class="h3 py-2">₹{{job.salary}}</p>
+                                <div class="company-info mb-3" style="display: flex; align-items: center; gap: 8px; font-size: 16px; color: #666;">
+                                    <i class="fa fa-building" style="color: #007bff;"></i>
+                                    <span><strong>Company:</strong> {{ job.user_id.username }}</span>
+                                </div>
                                  
                                 <h5>Description:</h5>
                                 <p>{{job.description}}</p>
@@ -77,6 +81,11 @@
               <ul class="list-group list-group-flush">
                   <li class="list-group-item"><b>Salary</b></li>
                 <li class="list-group-item">₹{{job.salary}}</li>
+                <li class="list-group-item"><b>Company</b></li>
+                <li class="list-group-item" style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666;">
+                    <i class="fa fa-building" style="color: #007bff;"></i>
+                    {{ job.user_id.username }}
+                </li>
               </ul>
               <div class="card-body">
                 <button type="submit" class="btn btn-primary"> <a href="{% url 'singlejob' job.id %}" style="color: white;">View</a></div></button>

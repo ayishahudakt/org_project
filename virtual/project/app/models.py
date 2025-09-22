@@ -126,7 +126,7 @@ class Room(models.Model):#chatroom
     
 class Message(models.Model):
     value=models.TextField()#value is the message the user wants to send ,message
-    date = models.TimeField(auto_now_add=True)#which date was this donne
+    date = models.DateTimeField(auto_now_add=True)#which date was this done
     user=models.TextField()#which user send the particular message
     room=models.TextField()#which room is the project message is sent 
     uid=models.IntegerField()

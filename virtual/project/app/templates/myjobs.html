@@ -55,7 +55,7 @@
               <a href="/myjob" class="{% if request.path == '/myjob' %}active{% endif %} left-link">my jobs</a>
               <a href="/people_applied" class="{% if request.path == '/people_applied' %}active{% endif %} left-link">people applied</a>
           {% endif %}
-          <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a>
+          <!-- <a href="/order-history" class="{% if request.path == '/order-history' %}active{% endif %} left-link">Order history</a> -->
           <a href="/logout" class="{% if request.path == '/logout' %}active{% endif %} left-link">Logout</a>
       </div>
   </div>
@@ -71,6 +71,11 @@
           <ul class="list-group list-group-flush">
               <li class="list-group-item"><b>Salary</b></li>
             <li class="list-group-item">₹{{job.salary}}</li>
+            <li class="list-group-item"><b>Company</b></li>
+            <li class="list-group-item" style="display: flex; align-items: center; gap: 8px; font-size: 14px; color: #666;">
+                <i class="fa fa-building" style="color: #007bff;"></i>
+                {{ job.user_id.username }}
+            </li>
           </ul>
           <div class="card-body">
             <button type="submit" class="btn btn-primary"> <a href="{% url 'singlejob' job.id %}" style="color: white;">View</a></button> 
