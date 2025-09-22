@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+
 <style>
     /* Add this CSS to your stylesheet */
     .featured_item_pic {
@@ -11,12 +12,15 @@
         background-size: cover; /* Ensures the image covers the entire container */
         background-position: center; /* Centers the image */
     }
+
 </style>
+
     <!-- Breadcrumb Section Begin -->
   
     <!-- Breadcrumb Section End -->
 
-    <!-- Shopping Cart Section Begin -->				
+    <!-- Shopping Cart Section Begin -->	
+			
     <section class="shopping-cart spad">
         <div class="container">
             <div class="row">
@@ -31,6 +35,7 @@
                                         <th class="product-remove" ></th>
                                         <th class="product-image">image</th>
                                         <th class="product-name">name</th>
+                                        <th class="product-seller">seller</th>
                                         <th class="product-price">price</th>
                                         <th class="product-quantity">quantity</th>
                                         <th class="product-total">total</th>       
@@ -47,6 +52,7 @@
                                           </svg></a></td>
                                         <td class="product-image"><img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" width=80px height=80px></td>
                                         <td class="product-name"><input class="p_id" name="pid[]" type="hidden"  value="{{ item.id }}">{{ item.product.title }}</td>
+                                        <td class="product-seller">{{ item.product.user.username }}</td>
                                         <td class="product-price cost"><span>₹</span>{{ item.product.price|floatformat:2 }}</td>
                                         <td class="product-quantity">
                                             
@@ -101,13 +107,13 @@
     <h2 class="mt-4" style=" margin-left:400px;">Your cart is empty!</h2>
     {% endif %}
     </section>
-    
+
     <!-- Shopping Cart Section End -->
+     
 <div id='add'></div>
-  
 
     <!-- Search Begin -->
-    
+   
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
@@ -220,4 +226,5 @@ $(".product-remove").click(function(event) {
  });
 
 </script>
+
 {% endblock %}

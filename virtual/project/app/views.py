@@ -544,6 +544,17 @@ def addproduct(request):
         image = request.FILES['images']  
         multi_images = request.POST.getlist('newsfeedsmultipleimg[]')
         
+        # Price validation
+        try:
+            price = float(price)
+            if price <= 0:
+                return JsonResponse({'error': 'Price must be greater than zero'})
+            if not price.is_integer():
+                return JsonResponse({'error': 'Price must be a whole number (no decimals)'})
+            price = int(price)  # Convert to integer
+        except (ValueError, TypeError):
+            return JsonResponse({'error': 'Invalid price format'})
+        
         product = Product(
             product_category=selected_product_category, 
             user =request.user,
@@ -700,6 +711,7 @@ def job(request):
     roll=Profile.objects.filter(user_id=user_id).values_list('roll', flat=True).first()
     choice=Profile.objects.filter(user_id=user_id).values_list('choice', flat=True).first()
     all_jobs=Jobs.objects.all()
+    print(f"Number of jobs: {all_jobs.count()}")  # Debug print
     return render(request,'jobs.html',{'all_jobs':all_jobs,'roll':roll,'choice':choice,})
 
 def singlejob(request,job_id):
@@ -710,21 +722,27 @@ def singlejob(request,job_id):
     job_categories = Job_category.objects.filter(jobs=job)
     category_ids = [category.id for category in job_categories]
     related_jobs= Jobs.objects.filter(job_category__in=category_ids).exclude(id=job_id)
+    
+    # Get job poster's roll information
+    job_poster_roll = Profile.objects.filter(user_id=job.user_id).values_list('roll', flat=True).first()
+    
     data={
                 'job':job,
                 'joblist': job_categories,
                 'related_jobs':related_jobs,
                 'roll':roll,
                 'choice':choice,
+                'job_poster_roll':job_poster_roll,
          }
     return render(request, 'singlejob.html',data)
     
 def myjob(request):
     user_id= request.user.id
     roll=Profile.objects.filter(user_id=user_id).values_list('roll', flat=True).first()
+    choice=Profile.objects.filter(user_id=user_id).values_list('choice', flat=True).first()
     user_ids=request.user.id
     job=Jobs.objects.filter(user_id=user_ids).all()
-    return render(request,'myjobs.html',{'job':job,'roll':roll})
+    return render(request,'myjobs.html',{'job':job,'roll':roll,'choice':choice})
 def myproducts(request):
     user_id= request.user.id
     roll=Profile.objects.filter(user_id=user_id).values_list('roll', flat=True).first()
@@ -891,12 +909,13 @@ def job_applying(request):
 def people_applied(request):
     user_id= request.user.id
     roll=Profile.objects.filter(user_id=user_id).values_list('roll', flat=True).first()
-    job = Jobs.objects.filter(user_id=user_id).first()  # Fetching the job posted by the user
+    jobs = Jobs.objects.filter(user_id=user_id)  # Fetching all jobs posted by the user
 
-    if job:
-        job_applications = Job_application.objects.filter(job_id=job)
+    if jobs.exists():
+        # Get all job applications for all jobs posted by the user
+        job_applications = Job_application.objects.filter(job_id__in=jobs)
         data={
-            'job': job, 
+            'jobs': jobs, 
             'job_applications': job_applications,
             'roll':roll,
         }
@@ -928,7 +947,8 @@ def product_search_ajax(request):
             'price':product.price,
             'description': product.description,  
             'image': product.image.url,
-            'id': product.id
+            'id': product.id,
+            'username': product.user.username
         }
         for product in products
     ]

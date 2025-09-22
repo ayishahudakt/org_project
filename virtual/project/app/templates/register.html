@@ -52,6 +52,7 @@
                     <div class="d-flex flex-row align-items-center mb-4">
                         <div class="form-outline flex-fill mb-0">
                             <input type="file" id="forcertificate" class="form-control" placeholder="certificate" name="certificate" required>
+                            <label class="form-label" for="pic">Upload your disabled-certificate</label><br>
                             <label class="form-label" for="certificate"></label>
                         </div>
                     </div>
@@ -120,73 +121,69 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
 $(document).ready(function() {
   $('input[name="choice"]').on('change', function() {
     if ($(this).val() === 'yes') {
+      // Show certificate upload
       $('#certificateInput').show();
       $('#forcertificate').prop('required', true);
 
-      $('#rollInput').show();
-      $('input[name="roll"]').prop('required', true);
+      // Force role as seller (hidden)
+      $('#rollInput').hide();
+      $('input[name="roll"][value="seller"]').prop('checked', true);
 
-      // Show both 'seller' and 'company' radio buttons
-      $('input[name="roll"]').parent().show();
     } else {
+      // Hide certificate upload
       $('#certificateInput').hide();
       $('#forcertificate').prop('required', false);
 
+      // Show rollInput with only user & company
       $('#rollInput').show();
+<<<<<<< HEAD
       $('input[name="roll"]').prop('required', false);
 
       // If choice is 'no', hide the 'seller' radio button
+=======
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
       $('input[name="roll"][value="seller"]').parent().hide();
+      $('input[name="roll"][value="user"]').parent().show();
+      $('input[name="roll"][value="company"]').parent().show();
+
+      // Default to user
+      $('input[name="roll"][value="user"]').prop('checked', true);
     }
   });
 
+<<<<<<< HEAD
   // Trigger change event on page load
+=======
+  // Trigger change on page load
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
   $('input[name="choice"]:checked').trigger('change');
 
-    $('#registration-form').on('submit', function(event) {
-      event.preventDefault();
+  $('#registration-form').on('submit', function(event) {
+    event.preventDefault();
 
-      if ($('input[name="choice"]:checked').val() === 'no' && !$('input[name="roll"][value="company"]').prop('checked')) {
-        $('input[name="roll"]').val('user');
+    var formData = new FormData(this);
+
+    $.ajax({
+      type: 'POST',
+      url: 'register',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        $('#reg').text(response.message);
+        window.location.href = '/user_login';
+      },
+      error: function(response) {
+        $('#reg').text(response.responseJSON.error);
       }
-
-      var formData = new FormData(this);
-
-      $.ajax({
-        type: 'POST',
-        url: 'register',
-        data: formData,
-        processData: false,
-        contentType: false,
-        success: function(response) {
-          $('#reg').text(response.message);
-          window.location.href = '/user_login';
-        },
-        error: function(response) {
-          $('#reg').text(response.responseJSON.error);
-        }
-      });
     });
   });
-  
-  $('#forimg').on('change', function () {
-    var input = this;
-
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload = function (e) {
-        // Update the preview image src attribute
-        $('#profilepic').attr('src', e.target.result).show();
-      };
-
-      reader.readAsDataURL(input.files[0]);
-    }
-  });
+});
 </script>
 
 {% endblock %}

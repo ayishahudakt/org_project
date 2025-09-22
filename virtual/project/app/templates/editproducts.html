@@ -56,9 +56,15 @@
                     </div>
     
                     <div class="form-outline mb-4">
+<<<<<<< HEAD
                       <input type="number"  name="price" placeholder="Product Price (₹100 - ₹1,00,000)" class="form-control form-control-lg" value='{{product_value.price}}' min="100" max="100000" step="1" required >
                       <label class="form-label" for="price" ></label>
                       <small class="form-text text-muted">Price must be between ₹100 and ₹1,00,000</small>
+=======
+                      <input type="number"  name="price" placeholder="Product Price" class="form-control form-control-lg" value='{{product_value.price}}' required min="1" max="500000" step="1" id="price-input">
+                      <label class="form-label" for="price" ></label>
+                      <div id="price-error" class="text-danger" style="display: none; font-weight: bold; margin-top: 5px;"></div>
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
                     </div>
                     <div class="form-outline mb-4">
                       <input type="hidden"  name="pid" class="form-control form-control-lg" value='{{product.id}}' required >
@@ -134,10 +140,41 @@ $(document).ready(function () {
     $('#productedit-form').on('submit', function (event) {
         event.preventDefault();
 
+<<<<<<< HEAD
         // Validate price range
         var price = parseFloat($('input[name="price"]').val());
         if (price < 100 || price > 100000) {
             alert("Price must be between ₹100 and ₹1,00,000");
+=======
+        // Price validation
+        var price = $('#price-input').val();
+        var priceError = $('#price-error');
+        
+        // Reset error message
+        priceError.hide();
+        
+        // Check if price is empty
+        if (!price) {
+            priceError.text('Price is required').show();
+            return;
+        }
+        
+        // Check if price is negative or zero
+        if (price <= 0) {
+            priceError.text('Price must be greater than zero').show();
+            return;
+        }
+        
+        // Check if price is not an integer
+        if (!Number.isInteger(parseFloat(price))) {
+            priceError.text('Price must be a whole number (no decimals)').show();
+            return;
+        }
+        
+        // Check if price exceeds 5 lakhs (500,000)
+        if (parseFloat(price) > 500000) {
+            priceError.text('Price cannot exceed ₹5,00,000 (5 lakhs)').show();
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
             return;
         }
 
@@ -284,6 +321,30 @@ $(document).on('click', '.delbtnnewsfeedmutliple', function (event) {
     var index = $(this).closest('.imag').index(); // Get the index of the clicked image
 
     deleteNewlyAddedImage(index);
+});
+
+// Real-time price validation
+$('#price-input').on('input', function() {
+    var price = $(this).val();
+    var priceError = $('#price-error');
+    
+    // Reset error message
+    priceError.hide();
+    
+    if (price) {
+        // Check if price is negative or zero
+        if (price <= 0) {
+            priceError.text('Price must be greater than zero').show();
+        }
+        // Check if price is not an integer
+        else if (!Number.isInteger(parseFloat(price))) {
+            priceError.text('Price must be a whole number (no decimals)').show();
+        }
+        // Check if price exceeds 5 lakhs (500,000)
+        else if (parseFloat(price) > 500000) {
+            priceError.text('Price cannot exceed ₹5,00,000 (5 lakhs)').show();
+        }
+    }
 });
     </script>
     {%endblock %}

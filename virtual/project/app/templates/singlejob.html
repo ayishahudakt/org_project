@@ -1,23 +1,359 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+
 <style>
-    .except
-    {
-        color:blue;
-        font-size:20px
+    .job-detail-page {
+        background: #f8f9fa;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+    
+    .job-header-section {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 2rem;
+    }
+    
+    .job-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .job-company {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        margin-bottom: 1rem;
+    }
+    
+    .job-salary {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #f39c12;
+    }
+    
+    .breadcrumb-nav {
+        background: white;
+        padding: 1rem 0;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .breadcrumb {
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .breadcrumb-item a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    
+    .breadcrumb-item a:hover {
+        color: #2980b9;
+        text-decoration: underline;
+    }
+    
+    .job-content-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    
+    .job-image-container {
+        position: relative;
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+    
+    .job-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+    
+    .job-image:hover {
+        transform: scale(1.05);
+    }
+    
+    .job-details {
+        padding: 2rem;
+    }
+    
+    .detail-section {
+        margin-bottom: 2rem;
+    }
+    
+    .detail-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        color: #2c3e50;
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #3498db;
+    }
+    
+    .job-description {
+        font-size: 1rem;
+        line-height: 1.7;
+        color: #555;
+        text-align: justify;
+    }
+    
+    .skills-container {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 6px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .skills-list {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #555;
+        margin: 0;
+    }
+    
+    .job-meta-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .meta-card {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 6px;
+        text-align: center;
+        border: 1px solid #e9ecef;
+    }
+    
+    .meta-label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .meta-value {
+        font-size: 1.1rem;
+        color: #555;
+        font-weight: 500;
+    }
+    
+    .action-section {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .apply-btn {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        color: white;
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(46, 204, 113, 0.3);
+    }
+    
+    .apply-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(46, 204, 113, 0.4);
+        color: white;
+        text-decoration: none;
+    }
+    
+    .restriction-message {
+        background: #fff3cd;
+        color: #856404;
+        padding: 1.5rem;
+        border-radius: 6px;
+        border: 1px solid #ffeaa7;
+        font-weight: 500;
+    }
+    
+    .related-jobs-section {
+        margin-top: 3rem;
+    }
+    
+    .related-jobs-title {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .related-job-card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+    
+    .related-job-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+    
+    .related-job-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .related-job-content {
+        padding: 1.5rem;
+    }
+    
+    .related-job-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .related-job-salary {
+        color: #27ae60;
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .view-details-btn {
+        background: #3498db;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: background 0.3s ease;
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .view-details-btn:hover {
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+    }
+    
+    .back-btn {
+        background: #6c757d;
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    
+    .back-btn:hover {
+        background: #5a6268;
+        color: white;
+        text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+        .job-title {
+            font-size: 2rem;
+        }
+        
+        .job-meta-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .job-details {
+            padding: 1.5rem;
+        }
     }
 </style>
-    <div class="job__details__content">
+
+<div class="job-detail-page">
+    <!-- Breadcrumb Navigation -->
+    <div class="breadcrumb-nav">
         <div class="container">
-            <div class="row d-flex justify-content-center">
-                <div class="col-lg-5" style="margin-top: 20px;">
-                    <div class="job__details__text" style="text-align:center">
-                        <div class="job_details_pic" style="width:486px;margin-left: -15px;">
-                            <img src="{{job.image.url}}"  width="650px" height="400px">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'job' %}">Jobs</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ job.title }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Job Header Section -->
+    <div class="job-header-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <h1 class="job-title">{{ job.title }}</h1>
+                    <p class="job-company">Company: {{ job.user_id.first_name|default:job.user_id.username|default:"Unknown" }} {{ job.user_id.last_name|default:"" }} </p>
+                    <p class="job-salary">₹{{ job.salary|floatformat:0 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <!-- Main Job Content -->
+            <div class="col-lg-8">
+                <div class="job-content-card">
+                    <div class="job-image-container">
+                        <img src="{{ job.image.url }}" alt="{{ job.title }}" class="job-image">
+                    </div>
+                    
+                    <div class="job-details">
+                        <div class="detail-section">
+                            <h3 class="section-title">Job Description</h3>
+                            <div class="job-description">
+                                {{ job.description|linebreaks }}
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h3 class="section-title">Required Skills</h3>
+                            <div class="skills-container">
+                                <div class="skills-list">
+                                    {{ job.skills|linebreaks }}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 {% comment %} <div class="col-lg-5" style="border: 1px solid;margin-top: 20px;">
                         <h3>Position</h3>
                         <p>{{ job.title}}</p>
@@ -52,32 +388,75 @@
                                {% else %}
                               <p class='except'>Only physically challenged people can apply</p>
                                {% endif %}
+=======
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Job Meta Information -->
+                <div class="job-content-card">
+                    <div class="job-details">
+                        <h3 class="section-title">Job Details</h3>
+                        <div class="job-meta-grid">
+                            <div class="meta-card">
+                                <div class="meta-label">Position</div>
+                                <div class="meta-value">{{ job.title }}</div>
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
                             </div>
+                            <div class="meta-card">
+                                <div class="meta-label">Salary</div>
+                                <div class="meta-value">₹{{ job.salary|floatformat:0 }}</div>
                 </div>
+                            <div class="meta-card">
+                                <div class="meta-label">Company</div>
+                                <div class="meta-value">{{ job.user_id.first_name|default:job.user_id.username|default:"Unknown" }} {{ job.user_id.last_name|default:"" }}</div>
+                            </div>
+                            
+                            <!--
+                            <div class="meta-card">
+                                <div class="meta-label">Company ID</div>
+                                <div class="meta-value">{{ job.user_id.id }}</div>
+                            </div>
+                            <div class="meta-card">
+                                <div class="meta-label">Company Role</div>
+                                <div class="meta-value">{{ job_poster_roll|default:"N/A" }}</div>
+                            -->
             </div>
             </div>
         </div>
     </div>
-</section>
-<!-- Shop Details Section End -->
-
-<!-- Related Section Begin -->
-<section class="related spad">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <h3 class="related-title">Related Jobs</h3>
+                
+                <!-- Action Section -->
+                <div class="action-section">
+                    {% if choice == 'yes' %}
+                        <a href="{% url 'job_application' job.id %}" class="apply-btn">
+                            <i class="fas fa-paper-plane"></i> Apply for this Job
+                        </a>
+                    {% else %}
+                        <div class="restriction-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            Only physically challenged people can apply for this job
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         </div>
       
-    <div class="row">{%for job in related_jobs %}
-        <div class="col-md-4">
-          <div class="card" style="width: 18rem;margin-top:80px;margin-left:60px;margin-bottom:80px;">
-              <img class="card-img-top" src={{job.image.url}} alt="Card image cap" style="width: 400px;height: 200px;">
-              <div class="card-body" style="height: 100px;">
-                <h5 class="card-title" style="text-decoration-line: underline;"> <b>Job post</b></h5>
-                <h5 class="card-title"> {{job.title}}</h5>
+        <!-- Related Jobs Section -->
+        {% if related_jobs %}
+        <div class="related-jobs-section">
+            <h2 class="related-jobs-title">Related Jobs</h2>
+            <div class="row">
+                {% for related_job in related_jobs %}
+                <div class="col-md-4 mb-4">
+                    <div class="related-job-card">
+                        <img src="{{ related_job.image.url }}" alt="{{ related_job.title }}" class="related-job-image">
+                        <div class="related-job-content">
+                            <h5 class="related-job-title">{{ related_job.title }}</h5>
+                            <p class="related-job-salary">₹{{ related_job.salary|floatformat:0 }}</p>
+                            <a href="{% url 'job32' related_job.id %}" class="view-details-btn">View Details</a>
               </div>
+<<<<<<< HEAD
               <ul class="list-group list-group-flush">
                   <li class="list-group-item"><b>Salary</b></li>
                 <li class="list-group-item">₹{{job.salary}}</li>
@@ -89,10 +468,15 @@
               </ul>
               <div class="card-body">
                 <button type="submit" class="btn btn-primary"> <a href="{% url 'singlejob' job.id %}" style="color: white;">View</a></div></button>
+=======
+>>>>>>> 8246f7f1f8ebec01b3afc79bcbc0af2bd80ba7dd
               </div>
             </div>
             {% endfor %}
           </div>
           </div>
-</section>
+        {% endif %}
+    </div>
+</div>
+
 {% endblock %}
